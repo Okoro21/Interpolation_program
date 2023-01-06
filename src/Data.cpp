@@ -3,7 +3,8 @@
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/Data.h"
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/open_close_file.h"
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/inverse_mat.h"// Header file containing the inverse program
-#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/initializing_invert.h"// Header file that initializes the invert array
+// #include "C:\dislin\dislin.h"
+
 
 #include <fstream>
 #include <string>
@@ -14,7 +15,20 @@
 
 using namespace std;
 
-// #include "C:\dislin\dislin.h"
+namespace //Using unnamed namesapce to define helper functions
+{
+// Initalizing the inverse array
+// Reads the values of the inverted from a data file into a 3x3 array
+
+	void initialize_inv(double invert_array[][3], ifstream & read)
+	{
+		for (int n = 0; n < 3; n++)
+		{
+			for (int m = 0; m < 3; m++)
+				read >> invert_array[n][m]; 
+		}
+	}
+}
 
 namespace okoroData //Implementation of Data class is contained within okoroData namespace
 {
@@ -121,10 +135,14 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		}
 	}
 		
-	void Data::initial_Qcoeff(double invertedArray[][3]) //Initalizing the Q_coeff array with coefficents generated from inverse solving the system of equations
+	/*
+		Need to adjust iniatial_Qcoeff() such that invertedArray[3][3] can have its values populated by the inverse
+		matrix algorithm directly
+	*/
+	void Data::initial_Qcoeff() //Initalizing the Q_coeff array with coefficents generated from inverse solving the system of equations
 	{
 		using okorofile::input_open;
-
+		double invertedArray[3][3]; //Values of the inverted array are not populated yet
 		Q_coeff = new float[15];
 		string ifile = "inverse_mat2.txt";
 		ifstream read;
@@ -135,7 +153,6 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		
 		for (int z = 0; z < 5; z++)
 		{
-			
 			initialize_inv(invertedArray, read);  // Makes a call to a function that initalilizes the inverse array.
 		
 			for (int j = 0; j < 3; j++)
@@ -285,9 +302,8 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		
 	}
 
-	void Data::garbage()
+	Data::~Data()
 	{
-
 		delete []x_values;
 		delete []y_values;
 		delete []x_mid;
@@ -301,7 +317,6 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		delete []Q_ymid;
 		delete []Q_error;
 		delete []L_error;
-		
 	} 
 
 }
