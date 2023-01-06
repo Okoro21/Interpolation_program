@@ -1,32 +1,19 @@
 //Christopher Okoro Program
-#ifndef DATA
-#define DATA
+#ifndef DATA_H
+#define DATA_H
 
-#include <iostream>
-#include <ostream>	
-#include <cmath>
-#include <string>
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/dislin.h"
 #include <fstream>
-#include <iomanip>
 
-#include "C:\Vs_code\Updated_Interpolation_program\inc\ofile_open.h"
-#include "C:\Vs_code\Updated_Interpolation_program\inc\ifile_open.h"
-#include "C:\Vs_code\Updated_Interpolation_program\inc\inverse_mat.h"// Header file containing the inverse program
-#include "C:\Vs_code\Updated_Interpolation_program\inc\initializing_invert.h"// Header file that initializes the invert array
-#include "C:\Vs_code\Updated_Interpolation_program\inc\dislin.h"
-
-
-using namespace std;
-
-namespace okoroData 
+namespace okoroData //Data class definiton is contained within okoroData namespace
 {  
 	typedef float* FloatArrayPtr;  // User defined data type for pointers that point to arrays of type float
-
 
 	class Data {
 		
 		public:
-		void print(ofstream& outs);
+		//Need to create destructor for class
+		void print(std::ofstream& outs);
 		void intro();
 		void initial_x();
 		void initial_y();
@@ -42,7 +29,6 @@ namespace okoroData
 		void plot();
 		void p_error();
 		void garbage();
-		
 			
 		private:
 			FloatArrayPtr x_values;
@@ -65,8 +51,12 @@ namespace okoroData
 			int plot_seg = 1000;  // Number of desired line segements 
 			int size = 11;  // Number of normal x and y values
 			int plot_size = 1001; // Size of array that will plot points 
-	};
-
+	}; 
 }
 		
-#endif //DATA
+#endif //DATA_H
+
+
+
+
+

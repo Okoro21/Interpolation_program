@@ -4,12 +4,13 @@
 
 typedef float* FloatArrayPtr;
 
-using namespace std;
-void inverse(double mat[][3], ofstream & out_data);
-void inverse(FloatArrayPtr mat[][3]);
+// void inverse(double mat[][3], ofstream & out_data);
+// void inverse(FloatArrayPtr mat[][3]);
 
-void inverse(double mat[][3], ofstream & out_data)
+void inverse(double mat[][3], std::ofstream &out_data)
 {
+	using namespace std;
+
 	//string file_name = "inverse_mat.txt";
 	//ofstream out_data;
 	//output_open(out_data, file_name); // userdefinded function checks to ensure the output file is opened properly

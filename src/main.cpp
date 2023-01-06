@@ -1,14 +1,14 @@
 //Christopher Okoro Program
-#include "C:\Vs_code\Updated_Interpolation_program\inc\Data.h"
-#include "Data.cpp"
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/Data.h"
+#include <fstream>
 
 using namespace okoroData;
 
 int main()
 {
-	Data values;
+	Data values; //Instantiated an object of type Data
 	double A_array[3][3], invert_array[3][3];
-	ofstream outs;
+	std::ofstream outs;
 
 	values.intro();
 	values.initial_x();
@@ -24,7 +24,7 @@ int main()
 	values.initial_plotP();
 	values.p_error();
 	values.print(outs);
-	//values.plot();
+	//values.plot(); //Need to adjust dislin functions 
 	values.garbage();
 
 

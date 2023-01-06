@@ -1,16 +1,22 @@
 //Christopher Okoro Program
 
-#include "C:\Vs_code\Updated_Interpolation_program\inc\Data.h"
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/Data.h"
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/open_close_file.h"
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/inverse_mat.h"// Header file containing the inverse program
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/initializing_invert.h"// Header file that initializes the invert array
+
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <ostream>	
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
 // #include "C:\dislin\dislin.h"
 
-// #include "C:\Dev_C_scripts\header_files\ofile_open.h" 
-// #include "C:\Dev_C_scripts\ENGR_50_project\inverse_mat.h" // Header file containing the inverse program
-// #include "C:\Dev_C_scripts\header_files\ifile_open.h"
-// #include "C:\Dev_C_scripts\ENGR_50_project\initializing_invert.h" // Header file that initializes the invert array
-// s
-// using namespace std;
-
-namespace okoroData 
+namespace okoroData //Implementation of Data class is contained within okoroData namespace
 {
 	void Data::intro()
 	{
@@ -117,6 +123,8 @@ namespace okoroData
 		
 	void Data::initial_Qcoeff(double invertedArray[][3]) //Initalizing the Q_coeff array with coefficents generated from inverse solving the system of equations
 	{
+		using okorofile::input_open;
+
 		Q_coeff = new float[15];
 		string ifile = "inverse_mat2.txt";
 		ifstream read;
@@ -238,6 +246,7 @@ namespace okoroData
 
 	void Data::print(ofstream& outs)  
 	{
+		using okorofile::output_open;
 		string ofile;
 		
 		cout << "Please enter the name of the output file (include the .txt extension)" << endl;
