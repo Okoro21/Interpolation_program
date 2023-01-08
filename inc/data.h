@@ -3,52 +3,39 @@
 #define DATA_H
 
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/dislin.h"
-#include <fstream>
+
+namespace okoroData
+{
+	typedef float* FloatArrayPtr;  // User defined data type for pointers that point to arrays of type float
+}
 
 namespace okoroData //Data class definiton is contained within okoroData namespace
 {  
-	typedef float* FloatArrayPtr;  // User defined data type for pointers that point to arrays of type float
-
 	class Data {
-		
 		public:
 			virtual ~Data();
-			//Need to create destructor for class
-			void print(std::ofstream& outs);
+			void print_data();
 			void getCoordinates();
-			void linInterpolate();
-			void quadInter();
-			void intro();
-			void initial_plotP();
-			void plot();
-			void p_error();
+			//void quadInter();
+			//void initial_plotP();
+			//void plot(); //maybe make plot a virtual function that derive classes can redefine
+			//void p_error();
 			
-		private:
+		protected:
+			// void getCoordinates();
 			void initial_x();
 			void initial_y();
 			void initial_xmid();
 			void initial_ymid();
-			void initial_slope();
-			void initial_yint();
-			void inital_L_ymid();
-			void initial_array(double A_array[][3]);
-			void initial_Qcoeff();
-			void initial_Q_ymid();
 
 			FloatArrayPtr x_values;
 			FloatArrayPtr y_values;
 			FloatArrayPtr x_mid;
 			FloatArrayPtr y_mid;
-			FloatArrayPtr plot_y;
-			FloatArrayPtr plot_x;
-			FloatArrayPtr slope;
-			FloatArrayPtr y_int;
-			FloatArrayPtr L_ymid;
-			FloatArrayPtr Q_coeff;
-			FloatArrayPtr Q_ymid;
-			FloatArrayPtr Q_error;
-			FloatArrayPtr L_error;
-			
+
+			// FloatArrayPtr plot_y;
+			// FloatArrayPtr plot_x;
+
 			int low_lim = -5;  //Lower limit of independent variable 
 			int up_lim = 5;   // Upper limit of the independent variable 
 			int N_seg = 10;  // Number of segments
@@ -57,7 +44,6 @@ namespace okoroData //Data class definiton is contained within okoroData namespa
 			int plot_size = 1001; // Size of array that will plot points 
 	}; 
 }
-		
 #endif //DATA_H
 
 

@@ -2,7 +2,7 @@
 // Opens input file
 // If the input file fails to open, the user is notified 
 
-#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/open_close_file.h"
+#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/IO_file.h"
 #include <fstream>
 #include <iostream>
 #include <string>
