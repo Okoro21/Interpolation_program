@@ -38,6 +38,29 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		cout << "Once The program is finished the data will be output to a data file of your choosing (.txt are the only permissible files)\n\n";
 	}
 
+	void Data::getCoordinates()
+	{
+		initial_x();
+		initial_y();
+		initial_xmid();
+		initial_ymid();
+	}
+
+	void Data::linInterpolate()
+	{
+		initial_slope();
+		initial_yint();
+		inital_L_ymid();
+	}
+
+	void Data::quadInter()
+	{
+		double A_array[3][3];
+		initial_array(A_array);
+		initial_Qcoeff();
+		initial_Q_ymid();
+	}
+
 	void Data::initial_x() //Initializes the x-values
 	{
 		x_values = new float[size];

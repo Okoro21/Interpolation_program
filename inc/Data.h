@@ -12,25 +12,29 @@ namespace okoroData //Data class definiton is contained within okoroData namespa
 	class Data {
 		
 		public:
-		//Need to create destructor for class
-		void print(std::ofstream& outs);
-		void intro();
-		void initial_x();
-		void initial_y();
-		void initial_xmid();
-		void initial_ymid();
-		void initial_slope();
-		void initial_yint();
-		void inital_L_ymid();
-		void initial_array(double A_array[][3]);
-		void initial_Qcoeff(double invertedArray[][3]);
-		void initial_Q_ymid();
-		void initial_plotP();
-		void plot();
-		void p_error();
-		void garbage();
+			virtual ~Data();
+			//Need to create destructor for class
+			void print(std::ofstream& outs);
+			void getCoordinates();
+			void linInterpolate();
+			void quadInter();
+			void intro();
+			void initial_plotP();
+			void plot();
+			void p_error();
 			
 		private:
+			void initial_x();
+			void initial_y();
+			void initial_xmid();
+			void initial_ymid();
+			void initial_slope();
+			void initial_yint();
+			void inital_L_ymid();
+			void initial_array(double A_array[][3]);
+			void initial_Qcoeff();
+			void initial_Q_ymid();
+
 			FloatArrayPtr x_values;
 			FloatArrayPtr y_values;
 			FloatArrayPtr x_mid;
