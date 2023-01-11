@@ -14,15 +14,14 @@ namespace okoroData //Data class definiton is contained within okoroData namespa
 	class Data {
 		public:
 			virtual ~Data();
-			void print_data();
 			void getCoordinates();
-			//void quadInter();
 			//void initial_plotP();
 			//void plot(); //maybe make plot a virtual function that derive classes can redefine
 			//void p_error();
 			
 		protected:
 			// void getCoordinates();
+			void print();
 			void initial_x();
 			void initial_y();
 			void initial_xmid();

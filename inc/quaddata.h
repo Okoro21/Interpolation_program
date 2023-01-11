@@ -19,7 +19,7 @@ namespace okoroData
 			void init_Qcoeff();
 			void init_Qymid();
             void quadp_error();
-            virtual void print();
+            void print();
 
             FloatArrayPtr quadCoeff;
 			FloatArrayPtr quad_ymid;

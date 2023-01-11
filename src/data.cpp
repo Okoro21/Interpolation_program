@@ -24,7 +24,6 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 		initial_y();
 		initial_xmid();
 		initial_ymid();
-		print_data();
 	}
 
 	void Data::initial_x() //Initializes the x-values
@@ -140,17 +139,17 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 	// 	}
 	// }
 
-	void Data::print_data()
+	void Data::print()
 	{
+		cout.setf(ios::fixed);
+		cout.precision(3);
+		
 		cout << "\t\t\t\t\tLinear Interpolation" << endl;
 		cout << "---------------------------------------------------------------------------------\n\n";
 		
-		cout << "x values " << "\ty values" << "\tActual x mid" << "\tActual y midpoints" << endl;
+		cout << "x values" << "\ty values" << "\tActual x mid" << "\tActual y midpoints" << endl;
 		for (int i = 0; i < size -1; i++)
-		{
 			cout << x_values[i] << "\t" << y_values[i] << "\t" << x_mid[i] << "\t" << y_mid[i] << endl;
-		}
-
 	}
 
 	Data::~Data()

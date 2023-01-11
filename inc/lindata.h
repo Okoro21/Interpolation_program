@@ -18,9 +18,9 @@ namespace okoroData
             void linInterpolate();
 
         private:
-            void initial_slope();
-			void initial_yint();
-			void inital_L_ymid();
+            void init_slope();
+			void init_yint();
+			void init_lin_ymid();
             void linp_error();
             void print();
 

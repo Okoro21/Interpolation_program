@@ -16,13 +16,13 @@ namespace okoroData
     void LinData::linInterpolate()
 	{
         getCoordinates();
-		initial_slope();
-		initial_yint();
-		inital_L_ymid();
+		init_slope();
+		init_yint();
+		init_lin_ymid();
 		print();
 	}
 
-    void LinData::initial_slope()
+    void LinData::init_slope()
 	{
 		slope = new float[size-1];
 		
@@ -30,7 +30,7 @@ namespace okoroData
 			slope[i] = (y_values[i+1] - y_values[i]) / (x_values[i+1] - x_values[i]);  // Determining the slope for each line 
 	}
 
-	void LinData::initial_yint()
+	void LinData::init_yint()
 	{
 		y_int = new float[size-1];
 		
@@ -38,7 +38,7 @@ namespace okoroData
 			y_int[i] = (y_values[i])- slope[i]*x_values[i];  // Determining the y-intercept of each line 
 	}
 
-    void LinData::inital_L_ymid()
+    void LinData::init_lin_ymid()
 	{
 		lin_ymid = new float[size-1];
 			
@@ -60,7 +60,7 @@ namespace okoroData
 		string ofile;
         ofstream outs;
 		
-		cout << "Please enter the name of the output file (include the .txt extension)" << endl;
+		cout << "LINEAR INTERPOLATION DATA:\nEnter output file (include the .txt extension)" << endl;
 		cin >> ofile;
 
 		output_open(outs, ofile); //Verify if output file opened successfully
@@ -74,7 +74,7 @@ namespace okoroData
 		outs << "\t\t\t\t\tLinear Interpolation" << endl;
 		outs << "---------------------------------------------------------------------------------\n\n";
 		
-		outs << "Actual X mid" << "\tActual Y midpoints" << "\tApproximated Y mid" << "\tPercent error %" << endl;
+		outs << "Actual x mid" << "\tActual y mid" << "\tApprox y mid" << "\t% Error" << endl;
 		
 		for (int i = 0; i < size-1; i++)
 			outs << x_mid[i] << setw(23) << y_mid[i] << setw(23) << lin_ymid[i] << setw(23) << linError[i] << endl;
@@ -91,5 +91,4 @@ namespace okoroData
 		delete [] lin_ymid;
         delete [] linError;
     }
-
 }

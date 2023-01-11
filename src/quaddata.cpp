@@ -35,7 +35,7 @@ namespace okoroData
 		init_array(A_array);
 		init_Qcoeff();
 		init_Qymid();
-		//print();
+		print();
 	}
 
     void QuadData::init_array(double A_array[][3])
@@ -55,7 +55,6 @@ namespace okoroData
 			{
 				A_array[q][0] = pow(A_array[q][0],2); // column 1 contains x_values ^2 column 2 contains x_values^1 column 3 contains x_values^0  
 				A_array[q][2] = 1;
-				
 			}
 		}
 	}
@@ -119,9 +118,9 @@ namespace okoroData
 		string ofile;
 		ofstream outs;
 
-		void quadp_error();
+		quadp_error();
 		
-		cout << "Please enter the name of the output file (include the .txt extension)" << endl;
+		cout << "QUADRATIC INTERPOLATION DATA:\nEnter output file (include the .txt extension)" << endl;
 		cin >> ofile;
 		output_open(outs, ofile); //Verify if output file opened successfully
 		
@@ -136,7 +135,8 @@ namespace okoroData
 		
 		for (int i = 0; i < size-1; i++)
 		{
-			outs << x_mid[i] << setw(23) << y_mid[i] << setw(23) << quad_ymid[i] << setw(23) << quadError[i] << endl;
+			outs << x_mid[i] << setw(23) << y_mid[i] << setw(23) << quad_ymid[i] 
+			<< setw(23) << quadError[i] << endl;
 		}
     }
 
