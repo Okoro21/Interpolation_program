@@ -8,19 +8,39 @@
 #include <iomanip>
 #include <cmath>
 
+#define ROWS 3
+#define COLS 3
+
+
 using namespace std;
+
+
 
 namespace //Using unnamed namesapce to define helper functions
 {
 // Initalizing the inverse array
 // Reads the values of the inverted from a data file into a 3x3 array
 
-	void init_inv(double invert_array[][3], ifstream & read)
-	{
-		for (int n = 0; n < 3; n++)
+	void inverse(double mat[][3], double inv_A[][3])
+	{		
+		float determinant = 0;
+		float inv_value = 0;
+		for (int i = 0; i < 3; i++)
+			determinant = determinant + (mat[0][i] * (mat[1][(i+1)%3] * mat[2][(i+2)%3] - mat[1][(i+2)%3] * mat[2][(i+1)%3]));
+
+		cout<<"\nDeterminant: "<< determinant;
+		cout<<"\nInverse of matrix: \n";
+		
+		for (int i = 0; i < 3; i++)
 		{
-			for (int m = 0; m < 3; m++)
-				read >> invert_array[n][m]; 
+			for(int j = 0; j < 3; j++)
+			{
+				inv_value = ((mat[(j+1)%3][(i+1)%3] * mat[(j+2)%3][(i+2)%3]) - (mat[(j+1)%3][(i+2)%3] * mat[(j+2)%3][(i+1)%3]))/ determinant;
+				cout << inv_value << " ";
+				inv_A[i][j] = inv_value;
+			}
+			
+			cout<<"\n";
 		}
 	}
 }
@@ -30,16 +50,20 @@ namespace okoroData
 {
     void QuadData::quadInterpolate()
 	{
+		double A_array[ROWS][COLS] = {0};
+		quadCoeff = new float[15];
+		*quadCoeff = 0;
+
 		getCoordinates();
-		double A_array[3][3];
 		init_array(A_array);
-		init_Qcoeff();
-		init_Qymid();
+		init_quadYmid();
 		print();
 	}
 
-    void QuadData::init_array(double A_array[][3])
+    void QuadData::init_array(double A_array[][COLS])
 	{
+		int index = 0;
+		double inv_A[ROWS][COLS] = {0};
 		for (int index = 0; index < 5; index++) // Initializing the values of the matrix A (3x3 matrix  of known values)
 		{	
 			for(int j = 0; j < 3; j++)
@@ -56,6 +80,20 @@ namespace okoroData
 				A_array[q][0] = pow(A_array[q][0],2); // column 1 contains x_values ^2 column 2 contains x_values^1 column 3 contains x_values^0  
 				A_array[q][2] = 1;
 			}
+
+			//Make a call to initialize Q_coeff
+
+			cout << "Augmented Array:\n";
+			for (int i = 0; i < ROWS; i++)
+			{
+				for (int j = 0; j < COLS; j++)
+					cout << A_array[i][j] << " ";
+
+				cout << "\n";
+			}
+
+			inverse(A_array,inv_A);
+			init_Qcoeff(inv_A);
 		}
 	}
 
@@ -63,35 +101,28 @@ namespace okoroData
 		Need to adjust iniatial_Qcoeff() such that invertedArray[3][3] can have its values populated by the inverse
 		matrix algorithm directly
 	*/
-	void QuadData::init_Qcoeff() //Initalizing the quad_coeff array with coefficents generated from inverse solving the system of equations
+	void QuadData::init_Qcoeff(double inv_A[][COLS]) //Initalizing the quad_coeff array with coefficents generated from inverse solving the system of equations
 	{
-		using okorofile::input_open;
-		
-		double invertedArray[3][3]; //Values of the inverted array are not populated yet
-		
-		quadCoeff = new float[15];
-		string ifile = "inverse_mat2.txt";
-		ifstream read;
-		
-		input_open(read, ifile); //User defined function to verify if input file opened successfully
-		
-		*quadCoeff = 0; //Initalizing all the values in the coefficent array to 0;
-		
-		for (int z = 0; z < 5; z++)
+		static int index = 0;
+		static int fiveCount = 0;
+
+		int y_index = 0;
+
+		for (int i = 0; i < ROWS; i++)
 		{
-			init_inv(invertedArray, read);  // Makes a call to a function that initalilizes the inverse array.
-		
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < COLS; j++)
 			{
-				for (int i = 0; i < 3; i++)
-				{
-					quadCoeff[(3*z)+j] = quadCoeff[(3*z)+j] + invertedArray[j][i]*y_values[(2*z)+i];   
-				}	
+				y_index = 2*fiveCount + j;
+				quadCoeff[index] += inv_A[i][j] * y_values[y_index];
 			}
+
+			index++;
 		}
+
+		fiveCount++;
 	}
 
-	void QuadData::init_Qymid() // Initalizes the dynamic array Q_ymid with the quadratic interpolated y_midpoints
+	void QuadData::init_quadYmid() // Initalizes the dynamic array Q_ymid with the quadratic interpolated y_midpoints
 	{
 		quad_ymid = new float[size-1];
 		
@@ -128,7 +159,7 @@ namespace okoroData
 		outs.setf(ios::showpoint);
 		outs.precision(3);
 		
-		outs << "\t\t\t\t\tQuadratic interpolation" << endl;
+		outs << "\t\t\t\t\tQUADRATIC INTERPOLATION DATA:" << endl;
 		outs << "---------------------------------------------------------------------------------\n\n";
 		
 		outs << "Actual X mid" << "\tActual Y midpoints" << "\tApproximated Y mid" << "\tPercent error %" << endl;
