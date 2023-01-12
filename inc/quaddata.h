@@ -19,7 +19,7 @@ namespace okoroData
         private:
         	void init_array(double A_array[][COLS]);
 			void init_Qcoeff(double inv_A[][COLS]);
-			void init_Qymid();
+			void init_quadYmid();
             void quadp_error();
             //void rowReduce(double A[][4]);
             void print();

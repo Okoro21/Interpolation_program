@@ -21,38 +21,6 @@ namespace //Using unnamed namesapce to define helper functions
 // Initalizing the inverse array
 // Reads the values of the inverted from a data file into a 3x3 array
 
-	void rowReduce(double A[][COLS], double Inv[][COLS])
-	{
-		int lead = 0;
-
-		while (lead < ROWS)
-		{
-			double d,m;
-
-			for (int r = 0; r < ROWS; r++)
-			{
-				d = A[lead][lead];
-				m = A[r][lead] / A[lead][lead];
-
-				for (int c = 0; c < COLS; c++)
-				{
-					if (r == lead)
-						A[r][c] /= d;
-					else
-						A[r][c] -= A[lead][c] * m;
-				}
-			}
-
-			lead++;
-		}
-
-		for (int i = 0; i < ROWS;i++)
-		{
-			for (int j = 0; j < COLS; j++)
-				Inv[i][j] = A[i][j];
-		}
-	}
-
 	void inverse(double mat[][3], double inv_A[][3])
 	{		
 		float determinant = 0;
@@ -60,10 +28,8 @@ namespace //Using unnamed namesapce to define helper functions
 		for (int i = 0; i < 3; i++)
 			determinant = determinant + (mat[0][i] * (mat[1][(i+1)%3] * mat[2][(i+2)%3] - mat[1][(i+2)%3] * mat[2][(i+1)%3]));
 
-		cout<<"\nSdeterminant: "<< determinant;
+		cout<<"\nDeterminant: "<< determinant;
 		cout<<"\nInverse of matrix: \n";
-		// out_data <<"\n\ndeterminant: "<< determinant;
-		// out_data<<"\nInverse of matrix is: \n";
 		
 		for (int i = 0; i < 3; i++)
 		{
@@ -72,15 +38,11 @@ namespace //Using unnamed namesapce to define helper functions
 				inv_value = ((mat[(j+1)%3][(i+1)%3] * mat[(j+2)%3][(i+2)%3]) - (mat[(j+1)%3][(i+2)%3] * mat[(j+2)%3][(i+1)%3]))/ determinant;
 				cout << inv_value << " ";
 				inv_A[i][j] = inv_value;
-	//			out_data << ((mat[(j+1)%3][(i+1)%3] * mat[(j+2)%3][(i+2)%3]) - (mat[(j+1)%3][(i+2)%3] * mat[(j+2)%3][(i+1)%3]))/ determinant;
 			}
 			
 			cout<<"\n";
 		}
-
 	}
-
-
 }
 
 
@@ -94,13 +56,8 @@ namespace okoroData
 
 		getCoordinates();
 		init_array(A_array);
-
-		cout << "\n";
-		
-		for (int i = 0; i < 15; i++)
-			cout << quadCoeff[i] << endl;
-		// init_Qymid();
-		// print();
+		init_quadYmid();
+		print();
 	}
 
     void QuadData::init_array(double A_array[][COLS])
@@ -136,7 +93,6 @@ namespace okoroData
 			}
 
 			inverse(A_array,inv_A);
-
 			init_Qcoeff(inv_A);
 		}
 	}
@@ -154,18 +110,19 @@ namespace okoroData
 
 		for (int i = 0; i < ROWS; i++)
 		{
-			index++;
 			for (int j = 0; j < COLS; j++)
 			{
 				y_index = 2*fiveCount + j;
 				quadCoeff[index] += inv_A[i][j] * y_values[y_index];
 			}
+
+			index++;
 		}
 
 		fiveCount++;
 	}
 
-	void QuadData::init_Qymid() // Initalizes the dynamic array Q_ymid with the quadratic interpolated y_midpoints
+	void QuadData::init_quadYmid() // Initalizes the dynamic array Q_ymid with the quadratic interpolated y_midpoints
 	{
 		quad_ymid = new float[size-1];
 		
@@ -202,7 +159,7 @@ namespace okoroData
 		outs.setf(ios::showpoint);
 		outs.precision(3);
 		
-		outs << "\t\t\t\t\tQuadratic interpolation" << endl;
+		outs << "\t\t\t\t\tQUADRATIC INTERPOLATION DATA:" << endl;
 		outs << "---------------------------------------------------------------------------------\n\n";
 		
 		outs << "Actual X mid" << "\tActual Y midpoints" << "\tApproximated Y mid" << "\tPercent error %" << endl;
@@ -217,7 +174,7 @@ namespace okoroData
     QuadData::~QuadData() //~QuadData automatically calls Data constructor due to parent child relationship
     {
         delete [] quadCoeff;
-		// delete [] quad_ymid;
-		// delete [] quadError;
+		delete [] quad_ymid;
+		delete [] quadError;
     }
 }
