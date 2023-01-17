@@ -11,6 +11,7 @@
 #include <ostream>	
 #include <cmath>
 #include <iomanip>
+#include <cstring>
 
 using namespace std;
 
@@ -18,103 +19,96 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 {
 	Data::Data()
 	{
-		//Init x values
+		//Init x & y values
 		x_values = new float[size];
+		y_values = new float[size];
 
 		int delta_x = (up_lim - low_lim)/N_seg;
 		
 		for (int i = 0; i < size; i++) 
+		{
 			x_values[i] = low_lim + delta_x*i;
-
-		//Init y values
-		y_values = new float[size];
-		
-		for (int i = 0; i < size; i++)
 			y_values[i] = 1/(1+pow(x_values[i],2));
-		
-		//Init x mid values
-		x_mid = new float[size-1];
-		
-		for (int i = 0; i < size-1; i++)
-			x_mid[i] = (x_values[i] + x_values[i+1])/2.0; 
+		}
 
-		//Init y mid values
+		//Init x & y mid values
+		x_mid = new float[size-1];
 		y_mid = new float[size-1];
 		
 		for (int i = 0; i < size-1; i++)
+		{
+			x_mid[i] = (x_values[i] + x_values[i+1])/2.0; 
 			y_mid[i] = 1/(1+pow(x_mid[i],2));  // Creating 10 y midpoint values 
+		}
 
 	}
 
 
-	// void Data::initial_plotP()
-	// {
-	// 	plot_x = new float[plot_size];
-	// 	plot_y = new float[plot_size];
-	// 	float plot_dx;	
-		
-	// 	plot_dx = static_cast<float>((up_lim-low_lim))/plot_seg;  // Determines the width of the interval for the actual plot of the function 
-		
-	// 	for (int j = 0; j < plot_size; j ++)
-	// 	{
-	// 		plot_x[j] = low_lim + plot_dx*j;
-	// 		plot_y[j] = 1/(1+pow(plot_x[j],2));  // Creating the actual y-values that will make up the smooth curve
-	// 	}
-	// }
+	void Data::plot(float *yMid, int size, int plot)
+	{
+		//LinData & QuadData call this function to plot interpolated vals
+		plotX = new float[plot_size];
+		plotY = new float[plot_size];
 
-	// void Data::plot()
-	// {
-	// 	int ic;
-	// 	char charBuff[30];
-	// //	 double fpi = 3.1415926/180., step, x;
-	// //  step = 360. / (size-1);
-	
-	// //***************Plot Configuration****************** // 
-	//   metafl("cons"); //Creates screen output. To create PDF output use "pdf"
-	//   disini();
-	//   pagera();
-	//   complx();
-	//   axspos(450,1800);
-	//   axslen(2200,1200);
-	//   name("X-axis","x");
-	//   name("Y-axis","y");
-	//   labdig(-1,"x");
-	//   ticks(9,"x");
-	//   ticks(10,"y");
-	//   titlin("Demonstration of CURVE",1);
-	//   titlin("1/(1+x^2)",3);
-	//   ic=intrgb(0.95,0.95,0.95);
-	//   axsbgd(ic);
-	//   graf(-7.,7.,-5.,0.5,0.,1.2,0,0.5);
-	//   setrgb(0.7,0.7,0.7);
-	//   grid(1,1);
-	//   color("fore");
-	//   height(50);
-	//   title();
-	// //********************Create Plot********************
-	// 	color("magenta");
-	//   curve(plot_x,plot_y,plot_size); //Plots actural curve
-	// 	marker(4);
-	// 	incmrk(-1); 
-	//   color("blue");
-	//   curve(x_mid,y_mid,size-1);
-	//   color("green");
-	//   curve(x_mid,L_ymid, size-1);  //Plots Linear interpolated _mid values 
-	// //	marker(3);
-	// //	incmrk(-1);
-	//   color("red");
-	//   curve(x_mid,Q_ymid,size-1); //Plots quadratic interpolated y_mid values
-	//   legini(charBuff,4,50);
-	//   leglin(charBuff, "Actual Function",1);
-	//   leglin(charBuff,"Actual Value",2);
-	//   leglin(charBuff, "Linear Interp",3);
-	//   leglin(charBuff, "Quadratic Interp", 4);
-	//   legtit("LEGEND");	
-	//   legpos(1,1);
-	//   legend(charBuff,7);
-	//   disfin(); //Ends plot session. Must include
+		char plot_type[50];
 
-	// }
+		float plot_delta = (up_lim - low_lim)/ static_cast<float>(plot_size);
+
+		for (int i = 0; i < plot_size; i++) 
+		{
+			plotX[i] = low_lim + plot_delta*i;
+			plotY[i] = 1/(1+pow(plotX[i],2));
+		}
+
+		if (plot == 1)
+			strncpy(plot_type, "QUADRATIC INTERPOLATION", 50);
+		else
+			strncpy(plot_type, "LINEAR INTERPOLATION", 50);
+
+		int ic;
+		Dislin g;
+
+		//g.setfil("my.PDF");
+		g.metafl("PNG"); //Creates screen output. To create PDF output use "pdf"
+		g.disini();
+		g.pagera();
+		g.complx();
+		g.axspos(450,1800);
+		g.axslen(2200,1200);
+		g.name("X-AXIS","x");
+		g.name("Y-AXIS","y");
+		g.labdig(-1,"x");
+		g.ticks(2,"x"); //Number of ticks between marked x-values  
+		g.ticks(5,"y"); //Number of ticks between marked y-values  
+		g.titlin(plot_type,1);
+		g.titlin("DEMONSTRATION OF CURVE",2);
+		g.titlin("1/(1+x^2)",3);
+		g.titjus("cent"); //Postion of the title, left,right,cent
+		g.htitle(50);
+		ic = g.intrgb(0.95,0.95,0.95);
+		g.axsbgd(ic);
+		g.graf(-7,7,-7,1,0,1.2,0,0.5);  //Creates 2D axis system
+		g.setrgb(0.7,0.7,0.7);
+		g.color("fore");
+		g.height(50);
+		g.title();
+		g.grid(2, 2);
+	//  g.gaxpar(min,max, "noextend","x", &low_lim, &up_lim, &first_lab, &step, &precision);
+
+//**********************************PLOT OF CURVES*************************************************************************
+
+		g.color("red");
+		g.curve(plotX, plotY, plot_size);
+		
+		g.marker(SYMBOL_CIRCLE);
+		g.incmrk(-1);
+		g.mrkclr(2);
+		g.hsymbl(12);
+		g.color("blue");
+		g.curve(x_mid, yMid, size);
+		g.disfin();
+
+	}
 
 	void Data::print()
 	{
@@ -131,28 +125,13 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 
 	Data::~Data()
 	{
-		// static int count = 0;
-		// try
-		// {
-		// 	count++;
-		// 	if (count > 1)
-		// 		throw count;
-		// 	delete []x_values;
-		// 	delete []y_values;
-		// 	delete []x_mid;
-		// 	delete []y_mid;
-		// }
 
-		// catch(int e)
-		// {
-		// 	cout << "Memory has already been freed" << endl;
-		// }
 		delete []x_values;
 		delete []y_values;
 		delete []x_mid;
 		delete []y_mid;
-		// delete []plot_y;
-		// delete []plot_x;
+		delete []plotY;
+		delete []plotX;
 	} 
 }
 

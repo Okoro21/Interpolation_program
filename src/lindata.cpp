@@ -23,6 +23,7 @@ namespace okoroData
 		init_yint();
 		init_lin_ymid();
 		print();
+		plot(lin_ymid, size-1, linear);
 	}
 
     void LinData::init_slope()

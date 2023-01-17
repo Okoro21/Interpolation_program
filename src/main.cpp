@@ -17,10 +17,5 @@ int main()
 
 	linear.linInterpolate();
 	quad.quadInterpolate();
-
-	//cout << "Data made it\n";
-
-	//values.plot(); //Need to adjust dislin functions 
-
 	return 0;
 }

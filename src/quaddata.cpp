@@ -53,6 +53,7 @@ namespace okoroData
 		init_array(A_array);
 		init_quadYmid();
 		print();
+		plot(quad_ymid, size-1, quadratic);
 	}
 
     void QuadData::init_array(double A_array[][COLS])
