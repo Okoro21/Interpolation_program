@@ -2,11 +2,12 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/dislin.h"
+#include "discpp.h"
 
 namespace okoroData
 {
 	typedef float* FloatArrayPtr;  // User defined data type for pointers that point to arrays of type float
+	enum plotType {linear, quadratic};
 }
 
 namespace okoroData //Data class definiton is contained within okoroData namespace
@@ -15,9 +16,7 @@ namespace okoroData //Data class definiton is contained within okoroData namespa
 		public:
 			~Data();
 			Data();
-			//void initial_plotP();
-			//void plot(); //maybe make plot a virtual function that derive classes can redefine
-			//void p_error();
+			void plot(float *yMid, int size, int plot); //maybe make plot a virtual function that derive classes can redefine
 			
 		protected:
 			void print();
@@ -27,8 +26,8 @@ namespace okoroData //Data class definiton is contained within okoroData namespa
 			FloatArrayPtr x_mid;
 			FloatArrayPtr y_mid;
 
-			// FloatArrayPtr plot_y;
-			// FloatArrayPtr plot_x;
+			FloatArrayPtr plotY;
+			FloatArrayPtr plotX;
 
 			int low_lim = -5;  //Lower limit of independent variable 
 			int up_lim = 5;   // Upper limit of the independent variable 
