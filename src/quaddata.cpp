@@ -114,9 +114,9 @@ namespace okoroData
 				float a = quadCoeff[3 * z];
 				float b = quadCoeff[(3 * z) + 1];
 				float c = quadCoeff[(3 * z) + 2];
-				float x1 = pow(x_mid[(2 * z) + i], 2);
+				float x = x_mid[(2 * z) + i];
 
-				quad_ymid[(2*z)+i] = quadCoeff[3*z]*pow(x_mid[(2*z)+i],2) + quadCoeff[3*z+1]*x_mid[(2*z)+i] + quadCoeff[3*z+2]; //Quadratic interpolated ymid points 
+				quad_ymid[(2*z)+i] = a*pow(x,2) + b*x + c; //Quadratic interpolated ymid points 
 			}
 		}
 
