@@ -7,10 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-
-#define ROWS 3
-#define COLS 3
-
+#include <string.h> //Included for the use of memset()
 
 using namespace std;
 
@@ -19,28 +16,22 @@ using namespace std;
 namespace //Using unnamed namesapce to define helper functions
 {
 // Initalizing the inverse array
-// Reads the values of the inverted from a data file into a 3x3 array
 
 	void inverse(double mat[][3], double inv_A[][3])
 	{		
 		float determinant = 0;
 		float inv_value = 0;
+
 		for (int i = 0; i < 3; i++)
 			determinant = determinant + (mat[0][i] * (mat[1][(i+1)%3] * mat[2][(i+2)%3] - mat[1][(i+2)%3] * mat[2][(i+1)%3]));
-
-		cout<<"\nDeterminant: "<< determinant;
-		cout<<"\nInverse of matrix: \n";
 		
 		for (int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 3; j++)
 			{
 				inv_value = ((mat[(j+1)%3][(i+1)%3] * mat[(j+2)%3][(i+2)%3]) - (mat[(j+1)%3][(i+2)%3] * mat[(j+2)%3][(i+1)%3]))/ determinant;
-				cout << inv_value << " ";
 				inv_A[i][j] = inv_value;
 			}
-			
-			cout<<"\n";
 		}
 	}
 }
@@ -48,13 +39,17 @@ namespace //Using unnamed namesapce to define helper functions
 
 namespace okoroData
 {
+	QuadData::QuadData() : Data()
+	{}
+
     void QuadData::quadInterpolate()
 	{
 		double A_array[ROWS][COLS] = {0};
 		quadCoeff = new float[15];
-		*quadCoeff = 0;
+		
+		memset(quadCoeff, 0, sizeof(int) * 15); //Set all of the values of quadCoeff = 0
 
-		getCoordinates();
+		// getCoordinates();
 		init_array(A_array);
 		init_quadYmid();
 		print();
@@ -64,6 +59,7 @@ namespace okoroData
 	{
 		int index = 0;
 		double inv_A[ROWS][COLS] = {0};
+
 		for (int index = 0; index < 5; index++) // Initializing the values of the matrix A (3x3 matrix  of known values)
 		{	
 			for(int j = 0; j < 3; j++)
@@ -81,26 +77,11 @@ namespace okoroData
 				A_array[q][2] = 1;
 			}
 
-			//Make a call to initialize Q_coeff
-
-			cout << "Augmented Array:\n";
-			for (int i = 0; i < ROWS; i++)
-			{
-				for (int j = 0; j < COLS; j++)
-					cout << A_array[i][j] << " ";
-
-				cout << "\n";
-			}
-
 			inverse(A_array,inv_A);
 			init_Qcoeff(inv_A);
 		}
 	}
 
-    /*
-		Need to adjust iniatial_Qcoeff() such that invertedArray[3][3] can have its values populated by the inverse
-		matrix algorithm directly
-	*/
 	void QuadData::init_Qcoeff(double inv_A[][COLS]) //Initalizing the quad_coeff array with coefficents generated from inverse solving the system of equations
 	{
 		static int index = 0;
@@ -113,7 +94,7 @@ namespace okoroData
 			for (int j = 0; j < COLS; j++)
 			{
 				y_index = 2*fiveCount + j;
-				quadCoeff[index] += inv_A[i][j] * y_values[y_index];
+				quadCoeff[index] += inv_A[i][j] * y_values[y_index]; // Dot product between inverse matrix and y_values
 			}
 
 			index++;
@@ -122,7 +103,7 @@ namespace okoroData
 		fiveCount++;
 	}
 
-	void QuadData::init_quadYmid() // Initalizes the dynamic array Q_ymid with the quadratic interpolated y_midpoints
+	void QuadData::init_quadYmid() // Initalizes the dynamic array quad_ymid with the quadratic interpolated y_midpoints
 	{
 		quad_ymid = new float[size-1];
 		
@@ -130,9 +111,15 @@ namespace okoroData
 		{
 			for (int i = 0; i < 2; i++)
 			{
+				float a = quadCoeff[3 * z];
+				float b = quadCoeff[(3 * z) + 1];
+				float c = quadCoeff[(3 * z) + 2];
+				float x1 = pow(x_mid[(2 * z) + i], 2);
+
 				quad_ymid[(2*z)+i] = quadCoeff[3*z]*pow(x_mid[(2*z)+i],2) + quadCoeff[3*z+1]*x_mid[(2*z)+i] + quadCoeff[3*z+2]; //Quadratic interpolated ymid points 
 			}
 		}
+
 	}
 
 	void QuadData::quadp_error()
@@ -159,10 +146,14 @@ namespace okoroData
 		outs.setf(ios::showpoint);
 		outs.precision(3);
 		
+
+
 		outs << "\t\t\t\t\tQUADRATIC INTERPOLATION DATA:" << endl;
 		outs << "---------------------------------------------------------------------------------\n\n";
 		
-		outs << "Actual X mid" << "\tActual Y midpoints" << "\tApproximated Y mid" << "\tPercent error %" << endl;
+		//Adjust formating
+
+		outs << "Actual X mid" << "\tActual Y midpoints" << "\tApproximated Y mid" << "\t% Error" << endl;
 		
 		for (int i = 0; i < size-1; i++)
 		{
@@ -173,8 +164,8 @@ namespace okoroData
 
     QuadData::~QuadData() //~QuadData automatically calls Data constructor due to parent child relationship
     {
-        delete [] quadCoeff;
-		delete [] quad_ymid;
-		delete [] quadError;
+        delete []quadCoeff;
+		delete []quad_ymid;
+		delete []quadError;
     }
 }

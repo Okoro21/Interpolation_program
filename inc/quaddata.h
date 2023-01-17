@@ -7,12 +7,14 @@
 //#include "inverse_mat.h"
 
 #define COLS 3
+#define ROWS 3
 
 namespace okoroData
 {
     class QuadData : public Data
     {
         public:
+            QuadData();
             ~QuadData();
             void quadInterpolate();
 
@@ -21,7 +23,6 @@ namespace okoroData
 			void init_Qcoeff(double inv_A[][COLS]);
 			void init_quadYmid();
             void quadp_error();
-            //void rowReduce(double A[][4]);
             void print();
 
             FloatArrayPtr quadCoeff;

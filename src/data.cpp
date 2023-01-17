@@ -2,7 +2,6 @@
 
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/data.h"
 #include "/home/chris/vsc_programs/C++_programs/projcets/Updated_Interpolation_program/inc/IO_file.h"
-// Header file containing the inverse program
 // #include "C:\dislin\dislin.h"
 
 
@@ -17,48 +16,36 @@ using namespace std;
 
 namespace okoroData //Implementation of Data class is contained within okoroData namespace
 {
-
-	void Data::getCoordinates()
+	Data::Data()
 	{
-		initial_x();
-		initial_y();
-		initial_xmid();
-		initial_ymid();
-	}
-
-	void Data::initial_x() //Initializes the x-values
-	{
+		//Init x values
 		x_values = new float[size];
 
 		int delta_x = (up_lim - low_lim)/N_seg;
 		
 		for (int i = 0; i < size; i++) 
 			x_values[i] = low_lim + delta_x*i;
-	}
 
-	void Data::initial_y() //Initializes the y-values
-	{
+		//Init y values
 		y_values = new float[size];
 		
 		for (int i = 0; i < size; i++)
 			y_values[i] = 1/(1+pow(x_values[i],2));
-	}
-
-	void Data::initial_xmid()  //Initializes the x-mid points
-	{
+		
+		//Init x mid values
 		x_mid = new float[size-1];
 		
 		for (int i = 0; i < size-1; i++)
 			x_mid[i] = (x_values[i] + x_values[i+1])/2.0; 
-	}
 
-	void Data::initial_ymid()
-	{
+		//Init y mid values
 		y_mid = new float[size-1];
 		
 		for (int i = 0; i < size-1; i++)
 			y_mid[i] = 1/(1+pow(x_mid[i],2));  // Creating 10 y midpoint values 
+
 	}
+
 
 	// void Data::initial_plotP()
 	// {
@@ -129,16 +116,6 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 
 	// }
 
-	// void Data::p_error()
-	// {
-	// 	Q_error = new float[size-1];
-
-	// 	for (int i = 0; i < size-1; i++)
-	// 	{
-	// 		Q_error[i] = (fabs(y_mid[i]-Q_ymid[i]))*100/(y_mid[i]);
-	// 	}
-	// }
-
 	void Data::print()
 	{
 		cout.setf(ios::fixed);
@@ -154,6 +131,22 @@ namespace okoroData //Implementation of Data class is contained within okoroData
 
 	Data::~Data()
 	{
+		// static int count = 0;
+		// try
+		// {
+		// 	count++;
+		// 	if (count > 1)
+		// 		throw count;
+		// 	delete []x_values;
+		// 	delete []y_values;
+		// 	delete []x_mid;
+		// 	delete []y_mid;
+		// }
+
+		// catch(int e)
+		// {
+		// 	cout << "Memory has already been freed" << endl;
+		// }
 		delete []x_values;
 		delete []y_values;
 		delete []x_mid;

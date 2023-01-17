@@ -14,6 +14,7 @@ namespace okoroData
     class LinData : public Data  //Derived class of base class Data
     {
         public:
+            LinData();
         	virtual ~LinData();
             void linInterpolate();
 

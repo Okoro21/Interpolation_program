@@ -13,9 +13,12 @@ using namespace std;
 
 namespace okoroData
 {
+	LinData::LinData() : Data()
+	{}
+	
     void LinData::linInterpolate()
 	{
-        getCoordinates();
+        //getCoordinates();
 		init_slope();
 		init_yint();
 		init_lin_ymid();
